@@ -29,8 +29,8 @@ end
  - Dada uma tabela de linhas, de cada linha sao retiradas coordenadas que serao
  - associadas a um ponto. Cada ponto recebera um identificador relacionado a sua 
  - posicao na tabela de linhas e sera adicionado a uma tabela de pontos.
- - inputs: Uma tabela de pontos(vazia) e uma tabela de linhas(strings).
- - output: Uma tabela de pontos modificada.
+ - inputs: Uma tabela de linhas(strings).
+ - output: Uma tabela de pontos.
 --]]
 function p.createPointsTable (lines)
     points = {}

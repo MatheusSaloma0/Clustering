@@ -1,7 +1,7 @@
 myio = {}
 
 --[[
- - Cada linha de arquivo eh adicionada a uma tabela. 
+ - Cada linha do arquivo eh adicionada a uma tabela. 
  - inputs: o nome de um arquivo.
  - output: uma tabela contendo as linhas do arquivo.
 --]]
@@ -19,7 +19,7 @@ end
 --[[
  - Dado um arquivo de entrada, le e armazena a distancia limite.
  - inputs: o nome de um arquivo.
- - output: um numero.
+ - output: um numero que corresponde a distancia limite.
 --]]
 function myio.readLimit(filename)
     local file = assert(io.open(filename,"rb"),"Erro na abertura do arquivo")
@@ -36,7 +36,7 @@ end
  - output: nenhum
 --]]
 function myio.write_sse (filename, value)
-    file = assert(io.open(filename, "w"), "Erro na criacao do arquivo")
+    local file = assert(io.open(filename, "w"), "Erro na criacao do arquivo")
     file:write(string.format("%.4f", value))
     file:flush();
     io.close(file)
@@ -48,13 +48,19 @@ end
  - output: nenhum
 --]]
 function myio.write_groups(filename,groups)
-    file = assert(io.open(filename, "w"), "Erro na criacao do arquivo")
+    local file = assert(io.open(filename, "w"), "Erro na criacao do arquivo")
 
-    for _,group in pairs(groups) do 
-        for _,point in pairs(group) do
-            file:write(point.id.." ")
+    for i,group in pairs(groups) do 
+        for j,point in pairs(group) do
+            if j ~= #group then  
+                file:write(point.id.." ")
+            else 
+                file:write(point.id)
+            end                
         end
-        file:write("\n\n")
+        if i ~= #groups then
+            file:write("\n\n")
+        end
     end
     
     file:flush();

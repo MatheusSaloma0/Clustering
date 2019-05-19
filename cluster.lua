@@ -6,7 +6,7 @@ cluster = {}
  - output: um numero que representa a distancia entre os pontos. 
 --]]
 function cluster.euclideanDistance (p1, p2)
-    sum = 0
+    local sum = 0
 
     for i = 1,#(p1.coordenates) do
         sum = sum + ((p1.coordenates[i] - p2.coordenates[i])^2)
@@ -52,6 +52,7 @@ end
 --]]
 function cluster.centroid (group)
     coord = {}
+    local n_elem = #group
 
     for i = 1,#group[1].coordenates do
         coord[i] = 0
@@ -61,7 +62,7 @@ function cluster.centroid (group)
         for j = 1,#group do
             coord[i] = coord[i] + group[j].coordenates[i]
         end
-        coord[i] = coord[i]/ #group
+        coord[i] = coord[i]/ n_elem
     end
     cm = {coordenates = coord}
         
@@ -75,11 +76,12 @@ end
  - output: um numero que corresponde ao SSE entre os grupos.
 --]]
 function cluster.sse (groups)
-    sum = 0
+    local sum = 0
+
     for i = 1,#groups do
-	c = cluster.centroid(groups[i])
+	    centro = cluster.centroid(groups[i])
         for j = 1,#groups[i] do
-        sum = sum + cluster.euclideanDistance(groups[i][j],c)^2
+        sum = sum + cluster.euclideanDistance(groups[i][j],centro)^2
         end
     end
     return sum

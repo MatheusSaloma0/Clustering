@@ -3,15 +3,8 @@ point = require("point")
 cluster = require("cluster")
 
 lines = {}
-lines = myio.readFileLines("entrada.txt")
-limit = myio.readLimit("distancia.txt")
-
-print("Distancia Limite: "..limit.."    "..type(limit).."\n")
-
-print("Linhas:")
-for k,v in pairs(lines) do
-    print(v.."      "..type(v))
-end
+lines = myio.readFileLines("baterias/bateria6/entrada.txt")
+limit = myio.readLimit("baterias/bateria6/distancia.txt")
 
 if limit < 0 then
     print("O limite deve ser um numero nao negativo")
