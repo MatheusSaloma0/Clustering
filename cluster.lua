@@ -76,10 +76,10 @@ end
 --]]
 function cluster.sse (groups)
     sum = 0
-
-    for i = 1,#groups do 
+    for i = 1,#groups do
+	c = cluster.centroid(groups[i])
         for j = 1,#groups[i] do
-        sum = sum + cluster.euclideanDistance(groups[i][j],cluster.centroid(groups[i]))^2
+        sum = sum + cluster.euclideanDistance(groups[i][j],c)^2
         end
     end
     return sum
