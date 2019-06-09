@@ -1,4 +1,3 @@
-import System.IO 
 import Data.List
 import Text.Printf
 
@@ -24,7 +23,6 @@ createPoints (x:xs) i = [Point{coordenates = x, index = i}] ++ createPoints xs (
 
 -- Calcula a distancia entre dois pontos
 distance :: Point -> Point -> Double
-distance (Point [] _) (Point [] _) = 0
 distance p1 p2 = sum $ map (^2) $ zipWith (-) (coordenates p1) (coordenates p2)
 
 -- Calcula a distancia euclidiana entre dois pontos
@@ -64,7 +62,7 @@ sse groups = sum [ distance x (snd(group)) | group <- aux, x <- fst(group)]
 groupToString :: [Point] -> String
 groupToString group = unwords $ map show $ map index group
  
--- Gera uma string que representa cada um dos grupos
+-- Gera uma string que representa o conjunto de grupos
 groupsToString :: [[Point]] -> String
 groupsToString groups = intercalate "\n\n" (map groupToString groups)
 
