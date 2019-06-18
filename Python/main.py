@@ -4,8 +4,7 @@ class Point:
     def __init__(self, coordenates, index): 
         self.coordenates = coordenates
         self.index = index 
-
-# Calcula a distancia euclidiana entre dois pontos.
+	
 def euclideanDistance(p1, p2):
     sum = 0.0
 
@@ -13,9 +12,6 @@ def euclideanDistance(p1, p2):
         sum += (p1.coordenates[i] - p2.coordenates[i])**2
     return sum**(0.5)
 
-# A funcao consiste em dividir um conjunto de pontos em N grupos, sendo que
-# os pontos pertencentes a um mesmo grupo possuem uma distancia euclidiana
-# menor ou igual a um limite pre-determinado.
 def clustering(points,limit):
     groups = [ [points[0]] ]
 
@@ -32,14 +28,11 @@ def clustering(points,limit):
                 groups.append(newGroup)
     return groups
 
-# Ler de distancia.txt
 with open(path + "distancia.txt",'r') as f_dist:
     limit = f_dist.read()
 f_dist.closed
 
-# Lista vazia de pontos
 points = []
-# Ler de entrada.txt
 with open(path + "entrada.txt", 'r') as f_entrada:
     filecontents = f_entrada.readlines()
     i = 1
