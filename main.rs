@@ -9,13 +9,11 @@ struct Point {
 
 fn main() {
     let path = "baterias/bateria1/";
-    let entrada = "entrada.txt";
-    let distancia = "distancia.txt";
-    let reader = BufReader::new(File::open(format!("{}{}",path,entrada)).expect("Erro na abertura do arquivo"));
+    let reader = BufReader::new(File::open(format!("{}{}",path,"entrada.txt")).expect("Erro na abertura do arquivo"));
     
-    let limit = fs::read_to_string(format!("{}{}",path,distancia)).expect("Erro na abertura do arquivo");
-    let limit2 = limit.trim().parse::<f64>().unwrap();
-    println!("Distancia: {}",limit2);
+    let content = fs::read_to_string(format!("{}{}",path,"distancia.txt")).expect("Erro na abertura do arquivo");
+    let limit = content.trim().parse::<f64>().unwrap();
+    println!("Distancia: {}",limit);
 
     let mut points : Vec<Point> = Vec::new();
     let mut i = 1;  
