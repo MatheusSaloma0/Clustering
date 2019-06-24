@@ -15,8 +15,8 @@ def readPoints_from(filename):
     points = []
     with open(filename, 'r') as filehandle:
         filecontents = filehandle.readlines()
-        i = 1
-        for line in filecontents:
+      
+        for i,line in enumerate(filecontents,start = 1):
             p_coords = [float(x) for x in line[:-1].split()]
             points.append(point.Point(p_coords,i))
             i += 1
