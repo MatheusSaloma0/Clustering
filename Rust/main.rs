@@ -1,4 +1,4 @@
-use std::io::{BufRead, BufReader};
+use std::io::{BufRead, BufReader, BufWriter, Write};
 use std::fs::File;
 use std::fs;
 
@@ -7,12 +7,12 @@ struct Point {
     index: usize,
 }
 
-fn read_limit_from(filename: String) -> f64 {
+fn read_limit_from (filename: String) -> f64 {
     let content = fs::read_to_string(filename).expect("Erro na abertura do arquivo");
     return content.trim().parse::<f64>().unwrap();
 }
 
-fn read_points_from(filename: String) -> Vec<Point> {
+fn read_points_from (filename: String) -> Vec<Point> {
     let reader = BufReader::new(File::open(filename).expect("Erro na abertura do arquivo"));
 
     let mut points: Vec<Point> = Vec::new();
@@ -28,7 +28,7 @@ fn read_points_from(filename: String) -> Vec<Point> {
     return points;
 }
 
-fn euclidean_distance(p1: &Point, p2: &Point) ->  f64 {
+fn euclidean_distance (p1: &Point, p2: &Point) ->  f64 {
     let mut sum = 0.0 as f64;
     let n = p1.coordenates.len();
     for i in 0..n {
@@ -37,28 +37,28 @@ fn euclidean_distance(p1: &Point, p2: &Point) ->  f64 {
     return sum.sqrt();
 }
 
-fn clustering(points: &Vec<Point>,limit: f64) -> Vec<Vec<usize>> {
-    let mut groups: Vec<Vec<usize>> = vec![vec![]];
-	groups[0].push(points[0].index);
+fn clustering (points: &Vec<Point>,limit: f64) -> Vec<Vec<&Point>> {
+    let mut groups: Vec<Vec<&Point>> = vec![vec![]];
+	groups[0].push(&points[0]);
 
     for i in 1..points.len() {
 		let mut leader = true;
 		
 		for j in 0..groups.len() {
-			if euclidean_distance(&points[i],&points[groups[j][0]-1]) <= limit {
-				groups[j].push(points[i].index);
+			if euclidean_distance(&points[i],&groups[j][0]) <= limit {
+				groups[j].push(&points[i]);
 				leader = false;
 				break;
 			}
 		}
 		if leader {
-			groups.push(vec![points[i].index]);
+			groups.push(vec![ &points[i] ]);
 		}
 	}
     return groups;
 }
 
-fn centroid (points: &Vec<Point>, group: &Vec<usize>) -> Point {
+fn centroid (points: &Vec<Point>, group: &Vec<&Point>) -> Point {
     let mut coords: Vec<f64> = Vec::new(); 
     let len_coords = points[0].coordenates.len();
     let len_group = group.len();
@@ -66,43 +66,45 @@ fn centroid (points: &Vec<Point>, group: &Vec<usize>) -> Point {
     for i in 0..len_coords {
         coords.push(0.0);
         for j in 0..len_group {
-            coords[i] += points[group[j]-1].coordenates[i];
+            coords[i] += group[j].coordenates[i];
         }
         coords[i] /= len_group as f64;
     }
     return Point{coordenates: coords, index: 0};
 }
 
-fn sse (points: &Vec<Point>, groups: &Vec<Vec<usize>>) -> f64{
+fn sse (points: &Vec<Point>, groups: &Vec<Vec<&Point>>) -> f64{
     let mut sum = 0 as f64;
 
     for group in groups {
-        let c: Point = centroid(&points,&group);
+        let c: Point = centroid(&points,group);
         for point in group {
-            sum += euclidean_distance(&points[point-1],&c).powf(2.0);
+            sum += euclidean_distance(point,&c).powf(2.0);
         }
     }
     return sum;
 }
 
-fn main() {    
-    let limit = read_limit_from(String::from("baterias/bateria1/distancia.txt"));
-    let points: Vec<Point> = read_points_from(String::from("baterias/bateria1/entrada.txt"));
+fn results (points: &Vec<Point>, groups: &Vec<Vec<&Point>>) {
+    let fsaida = File::create(String::from("saida.txt")).expect("Erro na abertura do arquivo");
+	let mut saida_buff = BufWriter::new(fsaida);
     
-    //Teste:
-    println!("{}",limit);
-    
-    //Teste:
-    for i in 0..points.len(){
-        println!("{:?} {}",points[i].coordenates,points[i].index);
-    }
-    let groups: Vec<Vec<usize>> = clustering(&points,limit);
-    
-    for i in &groups {
-        for j in i {
-            print!("{} ",j);
+    for group in groups {
+        for point in group {
+            write!(saida_buff,"{} ",point.index).unwrap();
         }
-        print!("\n");
+        write!(saida_buff,"\n\n").unwrap();
     }
-    println!("{}",sse(&points,&groups));   
+
+    let fresult = File::create(String::from("result.txt")).expect("Erro na abertura do arquivo");
+	let mut result_buff = BufWriter::new(fresult);
+	write!(result_buff, "{:.4}", sse(&points,&groups)).unwrap();
+}
+
+fn main() {    
+    let limit = read_limit_from(String::from("baterias/bateria5/distancia.txt"));
+    let points: Vec<Point> = read_points_from(String::from("baterias/bateria5/entrada.txt"));
+
+    let groups: Vec<Vec<&Point>> = clustering(&points,limit);
+    results(&points,&groups); 
 }
