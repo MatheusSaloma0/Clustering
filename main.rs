@@ -1,11 +1,10 @@
 use std::io::{BufRead, BufReader};
 use std::fs::File;
 use std::fs;
-use std::f64;
 
 struct Point {
     coordenates: Vec<f64>,
-    index: i32,
+    index: usize,
 }
 
 fn read_limit_from(filename: String) -> f64 {
@@ -30,7 +29,7 @@ fn read_points_from(filename: String) -> Vec<Point> {
 }
 
 fn euclidean_distance(p1: &Point, p2: &Point) ->  f64 {
-    let mut sum = 0.0_f64;
+    let mut sum = 0.0 as f64;
     let n = p1.coordenates.len();
     for i in 0..n {
         sum += (p1.coordenates[i] - p2.coordenates[i]).powf(2.0);
@@ -38,34 +37,53 @@ fn euclidean_distance(p1: &Point, p2: &Point) ->  f64 {
     return sum.sqrt();
 }
 
-fn clustering(points: Vec<&Point>,limit: f64) -> Vec<Vec<&Point>> {
-    let mut groups: Vec<Vec<&Point>> = Vec::new();
-    groups[0][0] = points[0];
+fn clustering(points: &Vec<Point>,limit: f64) -> Vec<Vec<usize>> {
+    let mut groups: Vec<Vec<usize>> = vec![vec![]];
+	groups[0].push(points[0].index);
 
     for i in 1..points.len() {
 		let mut leader = true;
 		
 		for j in 0..groups.len() {
-			if euclidean_distance(points[i],groups[j][0]) <= limit {
-				groups[j].push(points[i]);
+			if euclidean_distance(&points[i],&points[groups[j][0]-1]) <= limit {
+				groups[j].push(points[i].index);
 				leader = false;
 				break;
 			}
 		}
 		if leader {
-			let mut new_g: Vec<&Point> = Vec::new();
-			new_g[0] = points[i];
-			groups.push(new_g);
+			groups.push(vec![points[i].index]);
 		}
 	}
     return groups;
 }
 
-// fn centroid (group: Vec<&Point>) -> Point {
-// }
+fn centroid (points: &Vec<Point>, group: &Vec<usize>) -> Point {
+    let mut coords: Vec<f64> = Vec::new(); 
+    let len_coords = points[0].coordenates.len();
+    let len_group = group.len();
+   
+    for i in 0..len_coords {
+        coords.push(0.0);
+        for j in 0..len_group {
+            coords[i] += points[group[j]-1].coordenates[i];
+        }
+        coords[i] /= len_group as f64;
+    }
+    return Point{coordenates: coords, index: 0};
+}
 
-// fn sse (groups: Vec<Vec<&Point>>) -> f64{
-// }
+fn sse (points: &Vec<Point>, groups: &Vec<Vec<usize>>) -> f64{
+    let mut sum = 0 as f64;
+
+    for group in groups {
+        let c: Point = centroid(&points,&group);
+        for point in group {
+            sum += euclidean_distance(&points[point-1],&c).powf(2.0);
+        }
+    }
+    return sum;
+}
 
 fn main() {    
     let limit = read_limit_from(String::from("baterias/bateria1/distancia.txt"));
@@ -78,5 +96,13 @@ fn main() {
     for i in 0..points.len(){
         println!("{:?} {}",points[i].coordenates,points[i].index);
     }
-    // let groups: Vec<Vec<&Point>> = clustering(points,limit);  
+    let groups: Vec<Vec<usize>> = clustering(&points,limit);
+    
+    for i in &groups {
+        for j in i {
+            print!("{} ",j);
+        }
+        print!("\n");
+    }
+    println!("{}",sse(&points,&groups));   
 }
