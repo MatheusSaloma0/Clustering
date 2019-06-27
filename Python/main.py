@@ -1,9 +1,9 @@
-import io
+import i_o
 import point
 import cluster
 
-points = io.readPoints_from("entrada.txt")
-limit = io.readLimit_from("distancia.txt")
+points = i_o.readPoints_from("baterias/bateria1/entrada.txt")
+limit = i_o.readLimit_from("baterias/bateria1/distancia.txt")
 groups = cluster.clustering(points,limit)
-io.printGroups(groups,"saida.txt")
-io.printResult(cluster.sse(groups),"result.txt")
+i_o.printGroups(groups,"saida.txt")
+i_o.printResult(cluster.sse(groups),"result.txt")

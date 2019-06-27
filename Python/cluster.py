@@ -19,8 +19,7 @@ def clustering(points,limit):
                 leader = False
                 break
         if leader:
-            newGroup = [points[i]]
-            groups.append(newGroup)
+            groups.append([points[i]])
     return groups
 
 # O centroide eh o ponto representativo de um grupo e eh calculado
@@ -39,9 +38,8 @@ def centroid (group):
 # pertencentes a cada um dos grupos. Para tanto, eh utilizado o centroide de cada grupo.
 def sse(groups):
     sum = 0.0
-
-    for i in range(len(groups)):
-        c = centroid(groups[i])
-        for j in range(len(groups[i])):
-            sum += (groups[i][j].euclideanDistance(c))**2
+    for group in groups:
+        c = centroid(group)
+        for point in group:
+            sum += (point.euclideanDistance(c))**2
     return sum
