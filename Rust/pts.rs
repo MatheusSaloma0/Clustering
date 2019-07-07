@@ -13,11 +13,6 @@ impl std::fmt::Display for Point {
     }
 }
 
-// Inicializa um ponto a partir de um vetor de ponto flutuante e um inteiro.
-// pub fn init (c: Vec<f64>,i: usize)->Point{
-//     return Point{coordenates: c, index:i};
-// }
-
 // Calcula a distancia euclidiana entre dois pontos.
 pub fn euclidean_distance (p1: &Point, p2: &Point) ->  f64 {
     let mut sum = 0.0 as f64;

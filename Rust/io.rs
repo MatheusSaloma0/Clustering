@@ -6,7 +6,8 @@ use crate::pts;
 // Dado um arquivo de entrada, le um numero de ponto flutuante.
 // Esse valor representa a distancia limite.
 pub fn read_limit_from (filename: String) -> f64 {
-    let content = fs::read_to_string(filename).expect("Erro na abertura do arquivo");
+    let content = fs::read_to_string(filename)
+    .expect("Erro na abertura do arquivo de distancia");
     return content.trim().parse::<f64>().unwrap();
 }
 
@@ -14,7 +15,8 @@ pub fn read_limit_from (filename: String) -> f64 {
 // de um ponto, a funcao cria pontos associando as coordenadas de cada linha
 // a um identificador e insere esses pontos em um vetor.
 pub fn read_points_from (filename: String) -> Vec<pts::Point> {
-    let reader = BufReader::new(File::open(filename).expect("Erro na abertura do arquivo"));
+    let reader = BufReader::new(File::open(filename)
+    .expect("Erro na abertura do arquivo de entrada"));
     let mut points: Vec<pts::Point> = Vec::new();
     let mut i = 1;  
 
@@ -29,9 +31,10 @@ pub fn read_points_from (filename: String) -> Vec<pts::Point> {
     return points;
 }
 
-// Imprime os grupos formados pela funcao clustering() em um arquivo.
-pub fn print_groups (groups: &Vec<Vec<&pts::Point>>) {
-    let fsaida = File::create(String::from("saida.txt")).expect("Erro na abertura do arquivo");
+// Imprime os grupos formados pela funcao clustering() em um arquivo de saida.
+pub fn print_groups (filename: String, groups: &Vec<Vec<&pts::Point>>) {
+    let fsaida = File::create(filename)
+    .expect("Erro na abertura do arquivo de saida");
 	let mut saida_buff = BufWriter::new(fsaida);
     let mut result: Vec<String> = Vec::new();
 
@@ -42,9 +45,10 @@ pub fn print_groups (groups: &Vec<Vec<&pts::Point>>) {
     write!(saida_buff,"{}",result.join("\n\n")).unwrap();
 }
 
-// Imprime o valor calculado pela funcao sse() em um arquivo. 
-pub fn print_result (result: f64) {
-    let fresult = File::create(String::from("result.txt")).expect("Erro na abertura do arquivo");
+// Imprime o valor calculado pela funcao sse() em um arquivo de resultados.
+pub fn print_result (filename: String, result: f64) {
+    let fresult = File::create(filename)
+    .expect("Erro na abertura do arquivo de resultados");
 	let mut result_buff = BufWriter::new(fresult);
 	write!(result_buff, "{:.4}", result).unwrap();
 }
