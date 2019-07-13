@@ -10,7 +10,8 @@ menos relacionados em relação aos pontos associados aos outros grupos.
 Este trabalho realiza o agrupamento dos pontos obtidos a partir do arquivo entrada.txt 
 (contem as coordenadas dos pontos) com o auxilio do arquivo distancia.txt (contem a 
 distância limite que será utilizada para avaliar a relação entre os pontos). O critério 
-de qualidade utilizado será a soma das distâncias euclidianas quadradas (SSE) entre os 
+de qualidade utilizado é a soma das distâncias euclidianas quadradas (SSE) entre os 
 pontos pertencentes a cada um dos grupos.
 
-Os grupos serão armazenados no arquivo saida.txt e o calculo do SSE no arquivo result.txt.
+Os resultados obtidos serão armazenados nos arquivos saida.txt e result.txt que contém 
+respectivamente, os grupos obtidos e o calculo da SSE dos grupos.
