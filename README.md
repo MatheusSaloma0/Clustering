@@ -1,6 +1,8 @@
 # Clustering
 Trabalhos de Linguagens de Programação (Go, Lua, Haskell, Python e Rust)
 
+Professor Flávio Miguel Varejão
+
 Agrupamento de dados multidimensionais é um dos problemas mais comuns na área de
 mineração de dados. Esse problema consiste em dividir um conjunto de pontos em um
 espaço multidimensional em um determinado número pré-especificado de grupos de
